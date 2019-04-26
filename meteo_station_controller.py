@@ -3,8 +3,8 @@ import threading
 import paho.mqtt.client as mqtt
 import socket
 import time
-from weather_show_output import Weather_show_output
-from weather_station_sensors import Sensors
+from meteo_station_show_output import Meteo_show_output
+from meteo_station_sensors import Sensors
 from sense_hat import SenseHat
 
 def do(client, sensors, show_output):
@@ -58,7 +58,7 @@ def initialize(id, sensors, host, port=1883, username="", password=None, server_
 if __name__ == "__main__":
     #id is IP address
     id = socket.gethostbyname(socket.gethostname())
-    show_output = Weather_show_output()
+    show_output = Meteo_show_output()
     sensors = Sensors(id)
     sense = SenseHat()
     sense.stick.direction_right = show_output.turn_to_humidity

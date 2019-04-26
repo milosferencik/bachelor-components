@@ -155,7 +155,7 @@ def colour_value(pixel_list, temp) :
         pixel_list = [[255,0,0] if pixel == f else b for pixel in pixel_list]
     return pixel_list
 
-class Weather_show_output :
+class Meteo_show_output :
     def __init__(self):
         self.actual_values = None
         self.actual_output = self.show_temperature
