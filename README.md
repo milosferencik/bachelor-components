@@ -1,6 +1,7 @@
 # bachelor-components
 Žiarovka(bulb) - pri zapnutí začne odoberať(subscribe) tému "settings/bulb_IP_address".
     Pomocou tejto témy môžme:
+        
         -odoberať ďalšie témy. Uvediem príklad ako môže vyzerať správa. 
         "SUBSCRIBE home/room home/room/bulb1"
         Keď žiarovka dostane túto správu na tému "settings/bulb_IP_address", tak začne odoberať témy home/room a home/room/bulb1.
@@ -38,8 +39,10 @@ Najskôr si musíme vytvoriť našu vlastnú Certifikačnú autoritu(CA), vygene
     openssl genrsa -out server.key 2048
 4. Na vytvorenie broker certificate použijeme klúč z 3. kroku.
     openssl req -new -out server.csr -key server.key
-5. Podpíšeme broker certificate pomocou CA certificate z 2. kroku.
+5. Podpíšeme broker certificate pomocou CA certificate z 2. kroku. Do "subjectAltName=IP:" priradime adresu brokera. 
     openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 360
+    
+    openssl x509 -req -in server.csr -extfile <(printf "subjectAltName=IP:192.168.1.2") -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt -days 365
 6. Vytvoríme priečinok certs v adresáry /etc/mosquitto/ a presunieme tam položky broker certificate, čiže server.crt a broker key, čiže server.key. Vytvoríme priečinok ca_certificates v adresáry /etc/mosquitto/ a presunieme tam položku CA certificate, čiže ca.crt.
 7. Vytvorimé súbor rpimosquitto.conf ktorý bude obsahovať:
 #Plain MQTT protocol configuration

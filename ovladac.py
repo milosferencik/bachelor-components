@@ -4,6 +4,7 @@ import time
 def on_connect(client, userdata, flags, rc):
     print("Connected with rc: ", rc)
     client.subscribe("settings/#")
+    client.subscribe("temperature/#")
 
 def on_message(client, userdata, message):
     print("message received " ,str(message.payload.decode("utf-8")))
@@ -21,6 +22,7 @@ def initialize(name, host, port=1883, username="", password=None, server_tls=Fal
     #handle certification
     if server_tls :
         client.tls_set(server_cert)
+        #client.tls_insecure_set(True)
     #connect to broker
     client.connect(host, port, 60)
     return client
