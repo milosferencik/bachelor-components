@@ -5,6 +5,7 @@ def on_connect(client, userdata, flags, rc):
     print("Connected with rc: ", rc)
     client.subscribe("settings/#")
     client.subscribe("temperature/#")
+    client.subscribe("ovladac")
 
 def on_message(client, userdata, message):
     print("message received " ,str(message.payload.decode("utf-8")))

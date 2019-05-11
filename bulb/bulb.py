@@ -9,6 +9,7 @@ class Bulb:
         self.subscribe_topics = []
         self.last_color = [255, 255, 255]
         self.actual_state = False  #False when off, True when on
+        self.actual_intensity = True #False when low, True when normal
 
     def switch_on(self):
         self.sense.clear(self.last_color)
@@ -24,12 +25,22 @@ class Bulb:
         else:
             self.switch_on()
 
+    def switch_on_with_color(self, RGB_color):
+        if is_RGB_value(RGB_color):
+            self.last_color = RGB_color
+            self.switch_on()
+
+    def switch_off_with_color(self, RGB_color):
+        if is_RGB_value(RGB_color):
+            self.last_color = RGB_color
+            self.switch_off()
+
     def switch_with_color(self, RGB_color):
         if is_RGB_value(RGB_color):
             self.last_color = RGB_color
             self.switch()
 
-    def light_up(self, RGB_color, time=0.5):
+    def light_up(self, RGB_color, t=0.5):
         if is_RGB_value(RGB_color):
             self.last_color = RGB_color
         self.sense.clear()
@@ -40,13 +51,37 @@ class Bulb:
         for i in range(31,0,-1):
             self.sense.gamma = [x//i for x in copy]
             print(self.sense.gamma)
-            time.sleep(time)
+            time.sleep(t)
 
     def low_light(self):
         self.sense.low_light = True
+        self.actual_intensity = False
 
     def normal_light(self):
         self.sense.gamma_reset()
+        self.actual_intensity = True
+
+    def switch_intensity(self):
+        if self.actual_intensity:
+            self.low_light()
+        else:
+            self.normal_light()
+
+    def switch_on_security_light(self):
+        self.sense.clear([255,255,255])
+        time.sleep(20)
+        end = time.time() + 30
+        change = True
+        while time.time() < end:
+            if change:
+                self.sense.clear([255,0,0])
+                time.sleep(1)
+                change = False
+            else:
+                self.sense.clear([0,0,0])
+                time.sleep(1)
+                change = True    
+            
 
     def get_name(self):
         return self.name

@@ -4,9 +4,9 @@ from sense_hat import SenseHat
 class Sensors:
     def __init__(self, id):
         self.sense = SenseHat()
-        self.name = "sensors/" + id
+        self.name = "meteo_sensors/" + id
         self.settings_topic = "settings/" + self.name
-        self.topic = "temperature"
+        self.location = "meteo_sensors"
 
     def get_name(self):
         return self.name
@@ -14,11 +14,11 @@ class Sensors:
     def get_settings_topic(self):
         return self.settings_topic
 
-    def set_topic(self, topic):
-        self.topic = "temperature/" + topic
+    def set_location(self, location):
+        self.location = "meteo_sensors/" + location
 
-    def get_topic(self):
-        return self.topic
+    def get_location(self):
+        return self.location
 
     def get_temperature(self):
         output = os.popen('vcgencmd measure_temp').readline()
