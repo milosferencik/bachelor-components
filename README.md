@@ -83,6 +83,7 @@ Nainštalujeme python knižnicu pre MQTT klienta
 poprípade ďalšie knižnice, ktoré vyžadujú komponenty. Keď je všetko nainštalované, je treba zapnúť Raspberry Pi, ktoré slúži ako prístupový bod. Následne sa treba pripojiť s ostatnými Raspberry Pi do wifi siete s názvom SmartHome a heslom SmartHome1.
 
 **Žiarovka (bulb)**
+
 Je potrebne nainštalovať softvér na ovládanie Raspberry Pi SenseHat a následne Raspberry Pi reštartovať.
 ```
     sudo apt-get install sense-hat
@@ -98,23 +99,25 @@ Následne na túto tému môžme odosielať správy v tvare:
     V správe môže byť téme jedna alebo viac.
     Keď žiarovka dostane správu *UNSUBSCRIBE home/room home/room/bulb1*, tak prestane odoberať témy home/room a home/room/bulb1.
 
-    - *TOPICS*
+- *TOPICS*
     Keď žiarovka dostane túto správu, tak zverejní(publish) všetky svoje odoberané témy na tému *ovladac/bulb/<bulb_IP_address>*.
     
 Na ovládaciu téme môžme zasielať správy:
-    - *off* - žiarovka sa zhasne 
-    - *on* - žiarovka sa rozsvieti s poslednou nastavenou farbou
-    - *switch* - žiarovka zmení svoj stav, buď sa zhasne alebo rozsvieti s~poslednou nastavenou farbou
-    – *oncolor <farba>* - žiarovka sa rozsvieti
-    *switchcolor <farba>* - žiarovka zmení svoj stav, buď sa zhasne alebo rozsvieti s farbou
-    – *lightupcolor <farba>* - žiarovka sa postupne rozžiari s farbou
-    - *lowlight* - žiarovka nastaví znížený jas 
-    - *normallight* - žiarovka nastaví normálny jas
-    - *switchintensity* - žiarovka zmení svoju intenzitu jasu, buď nastaví znížený alebo normálny jas
-    - *security* - žiarovka svieti na bielo po dobu 20 sekúnd, potom 30 sekúnd bliká červené svetlo.
+- *off* - žiarovka sa zhasne 
+- *on* - žiarovka sa rozsvieti s poslednou nastavenou farbou
+- *switch* - žiarovka zmení svoj stav, buď sa zhasne alebo rozsvieti s~poslednou nastavenou farbou
+– *oncolor <farba>* - žiarovka sa rozsvieti
+- *switchcolor <farba>* - žiarovka zmení svoj stav, buď sa zhasne alebo rozsvieti s farbou
+– *lightupcolor <farba>* - žiarovka sa postupne rozžiari s farbou
+- *lowlight* - žiarovka nastaví znížený jas 
+- *normallight* - žiarovka nastaví normálny jas
+- *switchintensity* - žiarovka zmení svoju intenzitu jasu, buď nastaví znížený alebo normálny jas
+- *security* - žiarovka svieti na bielo po dobu 20 sekúnd, potom 30 sekúnd bliká červené svetlo.
+
 <farba> musí byť zapísaná vo formáte *[R,G,B]*, pričom R,G a B nadobúdaju honoty od 0 do 255 vrátane. 
 
 **Vypínač (light switch)**
+
 Je potrebné nainštalovať softvér na ovládanie GPIO pinov.
 ```
 pip install RPi.GPIO
@@ -131,6 +134,7 @@ Následne na túto tému môžme odosielať správy v tvare:
 Vypínač má tri tlačítka. Po stlačení prvého sa rozsvietia svetlá, druhého sa zmení intenzita jasu a tretieho sa svetlá vypnú.
 
 **Detektor pohybu (motion controll)**
+
 Je potrebné nainštalovať softvér na ovládanie GPIO pinov.
 ```
 pip install RPi.GPIO
@@ -152,6 +156,7 @@ Na ovládaciu tému môžme zasielať správu:
 Detektor pohybu má dva módy. Automatizačný mód pri zaznamenaní pohybu rozsvieti svetlá. Bezpečnostný mód pri zaznamenaní pohybu rozsvieti svetlá na bielo, zaznamená 20 sekundové video a potom svetlá začnú blikať na červeno.
 
 **Kamera (camera)**
+
 Je potrebné nainštalovať softvér na ovládanie GPIO pinov a na ovládanie kamery.
 ```
 pip install RPi.GPIO.PWM
@@ -170,6 +175,7 @@ Na ovládaciu tému je možné posielať správy:
 Z bezpečnostnej kamery je možné pozerať živé vysielanie vo viacerých prehliadačoch zároveň na URL adrese *<IP_kamera>:8000*.
 
 **Meteostanica (Meteostation)**
+
 Je potrebne nainštalovať softvér na ovládanie Raspberry Pi SenseHat a následne Raspberry Pi reštartovať.
 ```
     sudo apt-get install sense-hat
@@ -186,5 +192,7 @@ Namerané hodnoty sa tiež zobrazujú na LED displeji umiestnenom na Raspberry P
     - Dohora - teplota
     - Doľava - atmosferický tlak 
     - Doprava - vlhkosť
+
 **Ovládač**
+
 Na ovládanie tohto systému zatiaľ slúži jednoduchý program, ktorý si v cykle pýta tému a správu. Po zadaní oboch odošle zadanú správu na zadanú správu.
