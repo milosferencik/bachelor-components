@@ -43,9 +43,9 @@ def on_connect(client, motion_sensor, flags, rc):
     client.subscribe(motion_sensor.get_location())     
     
 #Client initializing 
-def initialize(id, motion_sensor, host, port=1883, username="", password=None, server_tls=False, server_cert=None):
+def initialize(id, motion_sensor, host, port=1883, server_tls=False, server_cert=None):
     print("create new instance")
-    #create new instance with unique id. In userdata we will create a dictionary where we save color and topic for publishing.
+    #create new instance with unique id. In userdata we save the reference of motion_sensor.
     client = mqtt.Client(client_id= id, userdata= motion_sensor)
     #attach function to callback
     client.message_callback_add(motion_sensor.get_settings_topic(), set_settings)
@@ -53,9 +53,6 @@ def initialize(id, motion_sensor, host, port=1883, username="", password=None, s
     client.on_connect=on_connect
     client.on_subscribe = on_subscribe
     client.on_unsubscribe = on_unsubscribe
-    #handle authentication
-    if username:
-        client.username_pw_set(username, password)
     #handle certification
     if server_tls :
         client.tls_set(server_cert)
@@ -67,7 +64,7 @@ if __name__ == "__main__":
     #id is IP address
     id = os.popen('ip addr show wlan0').read().split("inet ")[1].split("/")[0]
     motion_sensor = Motion_sensor(7,id)
-    client = initialize(motion_sensor.get_name(), motion_sensor, "192.168.1.2", 8883, "Milos", "qwerty", True, "../ca_certificates/ca.crt")
+    client = initialize(motion_sensor.get_name(), motion_sensor, "192.168.1.1", 8883, True, "../ca_certificates/ca.crt")
     motion_sensor.set_client(client)
     client.loop_forever()
     

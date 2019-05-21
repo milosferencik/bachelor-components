@@ -21,9 +21,12 @@ class Sensors:
         return self.location
 
     def get_temperature(self):
+        # get temperature from procesor
         output = os.popen('vcgencmd measure_temp').readline()
         cpu_temperature = float(output.replace("temp=", "").replace("'C\n", ""))
+        # get temperature from sensors
         temperature_sensor = (self.sense.get_temperature_from_pressure() + self.sense.get_temperature_from_humidity()) / 2
+        # do some matematical algorithm
         return temperature_sensor - ((cpu_temperature - temperature_sensor)/5.466)-6
     
     def get_humidity(self):
@@ -39,7 +42,7 @@ class Sensors:
 
     def get_result_string(self):
         actual_time = time.strftime("%a, %d %b %Y %H:%M:%S")
-        return "%s temperature is %s'C, humidity is %s%%, pressure is %shPA, which is %s pressure." % (actual_time, self.get_temperature(), self.get_humidity(), self.get_pressure()[0], self.get_pressure()[1])
+        return "%s %s temperature is %s'C, humidity is %s%%, pressure is %shPA, which is %s pressure." % (self.location, actual_time, self.get_temperature(), self.get_humidity(), self.get_pressure()[0], self.get_pressure()[1])
 
     def get_all_sensors_values(self):
         return (self.get_temperature(), self.get_humidity(), self.get_pressure())

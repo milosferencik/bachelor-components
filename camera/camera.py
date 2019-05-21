@@ -42,7 +42,9 @@ class Camera(object):
             
 
     def record_video(self):
+        # if camera is recording, than the record video started 5 second before 
         t = time.time() + 15
+        # if camera isn't recording, than the record video start normal
         if not self.is_initialize():
             self.initialize()
             t = t + 5
@@ -70,8 +72,10 @@ class Camera(object):
             camera.start_preview()
             time.sleep(2)
             
+            # create IO streams
             stream_video = picamera.PiCameraCircularIO(camera, seconds=20)
             stream_foto = io.BytesIO()
+            
             camera.start_recording(stream_video, format='h264')
             try:
                 while True:

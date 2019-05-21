@@ -43,6 +43,7 @@ class Streaming_handler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
+                #live streaming
                 while True:
                     frame = camera.get_frame()
                     self.wfile.write(b'--FRAME\r\n')
@@ -60,9 +61,6 @@ class Streaming_handler(server.BaseHTTPRequestHandler):
             self.end_headers()
 
     def do_POST(self):
-        """ do_POST() can be tested using curl command 
-            'curl -d "submit=On" http://server-ip-address:port' 
-        """
         content_length = int(self.headers['Content-Length'])    # Get the size of data
         post_data = self.rfile.read(content_length).decode("utf-8")   # Get the data
         post_data = post_data.split("=")[1]    # Only keep the value
@@ -75,8 +73,6 @@ class Streaming_handler(server.BaseHTTPRequestHandler):
         self.send_response(303)
         self.send_header('Location', '/')
         self.end_headers()
-
-        
 
 class Streaming_server(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True

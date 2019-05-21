@@ -30,11 +30,6 @@ class Bulb:
             self.last_color = RGB_color
             self.switch_on()
 
-    def switch_off_with_color(self, RGB_color):
-        if is_RGB_value(RGB_color):
-            self.last_color = RGB_color
-            self.switch_off()
-
     def switch_with_color(self, RGB_color):
         if is_RGB_value(RGB_color):
             self.last_color = RGB_color
@@ -67,6 +62,7 @@ class Bulb:
         else:
             self.normal_light()
 
+    # 20 second white light and after that red light blinks 30 seconds
     def switch_on_security_light(self):
         self.sense.clear([255,255,255])
         time.sleep(20)

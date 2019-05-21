@@ -6,7 +6,7 @@ class Servo_motor(object):
     pwm = None
 
     def __enter__(self):
-        print("__enter__")
+        #servomotor setup
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(11, GPIO.OUT)
         Servo_motor.pwm = GPIO.PWM(11, 50) #pin, frequency
@@ -14,7 +14,6 @@ class Servo_motor(object):
         return self
 
     def __exit__(self, exception_type, exception_value, traceback):
-        print("__exit__")
         time.sleep(0.5)
         Servo_motor.pwm.stop()
         GPIO.cleanup()
@@ -22,6 +21,7 @@ class Servo_motor(object):
 
     def move(self, value):
         newDc = Servo_motor.dc + value
+        # the servomotor turn acording to dc value
         if 2.5 <= newDc and newDc <= 11.5:
             Servo_motor.dc = newDc
             Servo_motor.pwm.ChangeDutyCycle(Servo_motor.dc)

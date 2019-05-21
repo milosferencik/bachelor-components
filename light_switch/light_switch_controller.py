@@ -31,7 +31,7 @@ def on_connect(client, switch, flags, rc):
     client.subscribe(switch.get_settings_topic())     
     
 #Client initializing 
-def initialize(id, switch, host, port=1883, username="", password=None, server_tls=False, server_cert=None):
+def initialize(id, switch, host, port=1883, server_tls=False, server_cert=None):
     print("create new instance")
     #create new instance with unique id. In userdata we save the reference of light switch.
     client = mqtt.Client(client_id= id, userdata= switch)
@@ -40,9 +40,6 @@ def initialize(id, switch, host, port=1883, username="", password=None, server_t
     client.on_connect=on_connect
     client.on_subscribe = on_subscribe
     client.on_unsubscribe = on_unsubscribe
-    #handle authentication
-    if username:
-        client.username_pw_set(username, password)
     #handle certification
     if server_tls :
         client.tls_set(server_cert)
@@ -54,7 +51,7 @@ if __name__ == "__main__":
     #id is IP address
     id = os.popen('ip addr show wlan0').read().split("inet ")[1].split("/")[0]
     switch = Light_switch(8, 10, 12, id)
-    client = initialize(switch.get_name(), switch, "192.168.1.2", 8883, "Milos", "qwerty", True, "../ca_certificates/ca.crt")
+    client = initialize(switch.get_name(), switch, "192.168.1.1", 8883, True, "../ca_certificates/ca.crt")
     switch.set_client(client)
     client.loop_forever()
     

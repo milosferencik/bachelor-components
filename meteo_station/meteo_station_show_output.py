@@ -139,6 +139,7 @@ def invert_matrix(pixel_list) :
             inverted[8*(7-z)+n] = pixel_list[i]
     return inverted
 
+# create value for show on display
 def create_value(temp):
     pixels = NUMBERS[abs(temp)//10] + NUMBERS[abs(temp)%10]
     return invert_matrix(pixels)
@@ -146,7 +147,7 @@ def create_value(temp):
 def colour_value(pixel_list, temp) :
     if temp < 0 :
         pixel_list = [[0,0,255] if pixel == f else b for pixel in pixel_list]
-        # if temp is negative we add minuss
+        # if temp is negative we add minus
         for x in range(2,6) :
             pixel_list[x] = f
     elif temp < 30 :
@@ -157,8 +158,8 @@ def colour_value(pixel_list, temp) :
 
 class Meteo_show_output :
     def __init__(self):
-        self.actual_values = None
-        self.actual_output = self.show_temperature
+        self.actual_values = None # last measured values by sensors
+        self.actual_output = self.show_temperature  #the output currently displayed
         self.sense = SenseHat()
 
     def set_actual_values(self, values):
@@ -194,6 +195,7 @@ class Meteo_show_output :
         pressure_state = self.actual_values[2][1]
         self.sense.set_pixels(SCREENS[pressure_state])
 
+    # shows what and in which units it will be displayed
     def show_turned_screen(self, name, unit) :
         self.sense.set_pixels(SCREENS[name])
         time.sleep(1)

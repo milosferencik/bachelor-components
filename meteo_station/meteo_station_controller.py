@@ -29,7 +29,7 @@ def on_connect(client, sensors, flags, rc):
     client.subscribe(sensors.get_settings_topic())     
     
 #Client initializing 
-def initialize(id, sensors, host, port=1883, username="", password=None, server_tls=False, server_cert=None):
+def initialize(id, sensors, host, port=1883, server_tls=False, server_cert=None):
     print("create new instance")
     #create new instance with unique id. In userdata we save reference to sensors.
     client = mqtt.Client(client_id= id, userdata= sensors)
@@ -38,9 +38,6 @@ def initialize(id, sensors, host, port=1883, username="", password=None, server_
     client.on_connect=on_connect
     client.on_subscribe = on_subscribe
     client.on_unsubscribe = on_unsubscribe
-    #handle authentication
-    if username:
-        client.username_pw_set(username, password)
     #handle certification
     if server_tls :
         client.tls_set(server_cert)
@@ -58,7 +55,7 @@ if __name__ == "__main__":
     sense.stick.direction_up = show_output.turn_to_temperature
     sense.stick.direction_left = show_output.turn_to_pressure
     measurment_interval = 5
-    client = initialize(sensors.get_name(), sensors, "192.168.1.2", 8883, "Milos", "qwerty", True, "../ca_certificates/ca.crt")
+    client = initialize(sensors.get_name(), sensors, "192.168.1.1", 8883, True, "../ca_certificates/ca.crt")
     #loop 
     client.loop_start()
     while True:

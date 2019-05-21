@@ -7,8 +7,9 @@ class Light_switch:
         self.name = "light_switch/" + id
         self.settings_topic = "settings/" + self.name
         self.last_color = "[255,255,255]"
-        self.topic = ""
+        self.topic = ""  # topic, which bulbs subscribe, so we will controll them with this topic
         self.client = None
+        # setup the buttons, and add callback functions
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(channel1, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(channel1, GPIO.FALLING, callback=self.switch_on, bouncetime=200)
@@ -40,17 +41,17 @@ class Light_switch:
 
     def switch_on(self, chanel):
         if self.client and self.topic != "":
-            message = "4 " + self.last_color
+            message = "oncolor " + self.last_color
             self.client.publish(self.topic, message)
 
     def switch_off(self, chanel):
         if self.client and self.topic != "":
-            message = "3 " + self.last_color
+            message = "off"
             self.client.publish(self.topic, message)
     
     def switch_intensity(self, chanel):
         if self.client and self.topic != "":
-            message = "9"
+            message = "switchintensity"
             self.client.publish(self.topic, message)
 
 def is_RGB_value(color):

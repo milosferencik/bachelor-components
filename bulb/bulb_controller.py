@@ -7,54 +7,52 @@ from threading import Thread
 #Callback functions.
 
 #Control the bulb lighting according to the message. 
-#If the message is "0", the bulb is turned off.
-#If the message is "1", the bulb is turned on.
-#If the message is "2", the bulb is switch to another state.
-#If the message is "3", the bulb is switch to another state with RGB color.
-#If the message is "4", the bulb light up with RGB color.
-#If the message is "5", the bulb has low light.
-#If the message is "6", the bulb has normal light.
-#If the message is "7", the bulb switch on security light.
+#If the message is "off", the bulb is turned off.
+#If the message is "on", the bulb is turned on with last set color.
+#If the message is "switch", the bulb is switch to another state.
+#If the message is "oncolor <color>", the bulb is turned on with RGB color.
+#If the message is "switchcolor <color>", the bulb is switch to another state with RGB color.
+#If the message is "lightupcolor <color>", the bulb light up with RGB color.
+#If the message is "lowlight", the bulb has low light.
+#If the message is "normallight", the bulb has normal light.
+#If the message is "switchintensity", the bulb switch to another intensity.
+#If the message is "security", the bulb switch on security light, which means 20 second white light and after that red light blinks 30 seconds.
 def control_lighting(client, bulb, message):
     mes = str(message.payload.decode("utf-8"))
     mes_list = mes.split(" ")
     #switch off
-    if mes_list[0] == "0" :
+    if mes_list[0] == "off" :
         bulb.switch_off()
         return
     #switch on
-    if mes_list[0] == "1" :
+    if mes_list[0] == "on" :
         bulb.switch_on()
         return
     #switch
-    if mes_list[0] == "2" :
+    if mes_list[0] == "switch" :
         bulb.switch()
-    #switch off with color
-    if mes_list[0] == "3" :
-        color = eval(mes_list[1])
-        bulb.switch_off_with_color(color)
     #switch on with color
-    if mes_list[0] == "4" :
+    if mes_list[0] == "oncolor" :
         color = eval(mes_list[1])
         bulb.switch_on_with_color(color)
     #switch with color
-    if mes_list[0] == "5" :
+    if mes_list[0] == "switchcolor" :
         color = eval(mes_list[1])
         bulb.switch_with_color(color)
     #light up with color
-    if mes_list[0] == "6" :
+    if mes_list[0] == "lightupcolor" :
         color = eval(mes_list[1])
         thread = Thread(target = bulb.light_up, args= (color,))
         thread.start()
         thread.join()
     #low light 
-    if mes_list[0] == "7" :
+    if mes_list[0] == "lowlight" :
         bulb.low_light()
     #normal light
-    if mes_list[0] == "8" :
+    if mes_list[0] == "normallight" :
         bulb.normal_light()
     #switch intensity
-    if mes_list[0] == "9" :
+    if mes_list[0] == "switchintensity" :
         bulb.switch_intensity()
     #security light
     if mes_list[0] == "security" :
@@ -96,7 +94,7 @@ def on_connect(client, bulb, flags, rc):
     client.subscribe(bulb.get_settings_topic())      
     
 #Client initializing 
-def initialize(id, bulb, host, port=1883, username="", password=None, server_tls=False, server_cert=None):
+def initialize(id, bulb, host, port=1883, server_tls=False, server_cert=None):
     print("create new instance")
     #create new instance with unique id. In userdata we will save last_color and subscribed topics.
     # If clean_session=False, xsubscription information and queued messages will be retained when the client disconnects.
@@ -107,9 +105,6 @@ def initialize(id, bulb, host, port=1883, username="", password=None, server_tls
     client.on_connect=on_connect
     client.on_subscribe = on_subscribe
     client.on_unsubscribe = on_unsubscribe
-    #handle authentication
-    if username:
-        client.username_pw_set(username, password)
     #handle certification
     if server_tls :
         client.tls_set(server_cert)
@@ -121,5 +116,5 @@ if __name__ == "__main__":
     #name is IP address
     id = os.popen('ip addr show wlan0').read().split("inet ")[1].split("/")[0]
     bulb = Bulb(id)
-    client = initialize(bulb.get_name(), bulb, "192.168.1.2", 8883, "Milos", "qwerty", True, "../ca_certificates/ca.crt")
+    client = initialize(bulb.get_name(), bulb, "192.168.1.1", 8883, True, "../ca_certificates/ca.crt")
     client.loop_forever()

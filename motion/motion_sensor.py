@@ -5,13 +5,14 @@ class Motion_sensor:
         self.name = "motion_sensor/" + id
         self.location = "motion_sensor"
         self.settings_topic = "settings/" + self.name
-        self.mode = "automation"
+        self.mode = "automation"  #actual mode of motion sensor
         self.client = None
         self.light_topic = ""
         self.camera_name = ""
+        #setup PIR sensor and add callback function
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(channel, GPIO.IN)
-        GPIO.add_event_detect(channel, GPIO.RISING, callback=self.on_motion, bouncetime=20000)
+        GPIO.add_event_detect(channel, GPIO.RISING, callback=self.on_motion)
     
     def set_client(self, client):
         self.client = client
@@ -51,10 +52,12 @@ class Motion_sensor:
         message = self.name + " : " + self.mode + " mode!"
         self.client.publish("ovladac", message)
 
+    # automation mode switch on the bulbs
     def automation(self):
         if self.client and self.light_topic != "":
-            self.client.publish(self.light_topic, "1")
+            self.client.publish(self.light_topic, "on")
 
+    # security mode switchs on 20 second white light and records 20 seconds video. After that red light blinks 30 seconds.
     def security(self):
         if self.client and self.camera_name != "":
             if self.light_topic != "":
