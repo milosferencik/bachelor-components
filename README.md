@@ -174,7 +174,7 @@ Detektor pohybu má dva módy. Automatizačný mód pri zaznamenaní pohybu rozs
 
 Je potrebné nainštalovať softvér na ovládanie GPIO pinov a na ovládanie kamery.
 ```
-pip install RPi.GPIO.PWM
+pip install RPi.GPIO
 sudo apt-get install python3-picamera
 ```
 Pri zapnutí kamery ``` python3 camera/camera_controller.py ``` začne odoberať nastavovaciu tému *settings/camera/<IP_adresa_kamery>*.
