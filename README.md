@@ -24,8 +24,11 @@ rsn_pairwise=CCMP
 ```
 
 Inštalácia MQTT brokera. Najskôr treba stiahnuť potrebný softvér.
+```
     sudo apt-get install mosquitto
     sudo apt-get install openssl
+```
+
 Konfiguracia MQTT broker aby používal TLS.
 
 Najskôr si musíme vytvoriť našu vlastnú Certifikačnú autoritu(CA), vygenerovať kľúče a certifikáty pomocou openssl. Robíme to v adresáry openssl.
@@ -91,15 +94,19 @@ Je potrebne nainštalovať softvér na ovládanie Raspberry Pi SenseHat a násle
 ```
 Pri zapnutí žiarovky ``` python3 bulb/bulb_controller.py ``` začne odoberať nastavovaciu tému *settings/bulb/<IP_adresa_žiarovky>*.
 Následne na túto tému môžme odosielať správy v tvare:
-    - *SUBSCRIBE <téma1> <téma2>*
+
+- *SUBSCRIBE <téma1> <téma2>*
+    
     V správe môže byť téme jedna alebo viac.
     Keď žiarovka dostane správu *SUBSCRIBE home/room home/room/bulb1*, tak začne odoberať témy home/room a home/room/bulb1, na ktoré môže potom odosielať ovládacie správy.
 
-    - *UNSUBSCRIBE <téma1> <téma2>*
+- *UNSUBSCRIBE <téma1> <téma2>*
+    
     V správe môže byť téme jedna alebo viac.
     Keď žiarovka dostane správu *UNSUBSCRIBE home/room home/room/bulb1*, tak prestane odoberať témy home/room a home/room/bulb1.
 
 - *TOPICS*
+    
     Keď žiarovka dostane túto správu, tak zverejní(publish) všetky svoje odoberané témy na tému *ovladac/bulb/<bulb_IP_address>*.
     
 Na ovládaciu téme môžme zasielať správy:
@@ -124,11 +131,14 @@ pip install RPi.GPIO
 ```
 Pri zapnutí vypínača ``` python3 light_switch/light_switch_controller.py ``` začne odoberať nastavovaciu tému *settings/light_switch/<IP_adresa_vypínača>*.
 Následne na túto tému môžme odosielať správy v tvare:
-    - *SETTOPIC <téma>* 
+
+- *SETTOPIC <téma>* 
+    
     Téma môže byť nastavená len jedna.
     Keď vypínač dostane správu *SETTOPIC home/room*, tak sa nastaví téma home/room, na ktorú budú posielané príkazy po stalčení tlačítka. 
 
-    - *SETCOLOR <farba>* 
+- *SETCOLOR <farba>* 
+    
     Dá sa nastaviť farba, s ktorou budú žiarovky svietiť pri ich zapnutí vypínačom.
 
 Vypínač má tri tlačítka. Po stlačení prvého sa rozsvietia svetlá, druhého sa zmení intenzita jasu a tretieho sa svetlá vypnú.
@@ -141,17 +151,22 @@ pip install RPi.GPIO
 ```
 Pri zapnutí detektora pohybu ``` python3 motion/motion_controller.py ``` začne odoberať nastavovaciu tému *settings/motion_sensor/<IP_adresa_detektora>*.
 Následne na túto tému môžme odosielať správy v tvare:
-    - *SETLOCATION <lokácia>* 
+
+- *SETLOCATION <lokácia>* 
+  
     Nastaví alebo zmení ovládaciu tému na *motion\_sensor/<lokácia>*.
 
-    - *SETLIGHTTOPIC <topic>* 
+- *SETLIGHTTOPIC <topic>* 
+    
     Nastaví tému, ktorou budú ovládané svetlá.
 
-    - *SETCAMERANAME <názov>* 
+- *SETCAMERANAME <názov>* 
+    
     Nastaví kameru, ktorá bude spustená.
 
 Na ovládaciu tému môžme zasielať správu:
-    - *switchmode* - detektor pohybu sa prepne do druhého módu.
+    
+- *switchmode* - detektor pohybu sa prepne do druhého módu.
 
 Detektor pohybu má dva módy. Automatizačný mód pri zaznamenaní pohybu rozsvieti svetlá. Bezpečnostný mód pri zaznamenaní pohybu rozsvieti svetlá na bielo, zaznamená 20 sekundové video a potom svetlá začnú blikať na červeno.
 
@@ -164,13 +179,16 @@ sudo apt-get install python3-picamera
 ```
 Pri zapnutí kamery ``` python3 camera/camera_controller.py ``` začne odoberať nastavovaciu tému *settings/camera/<IP_adresa_kamery>*.
 Následne na túto tému môžme odosielať správy v tvare:
-    - *SETNAME <názov>* 
+
+- *SETNAME <názov>* 
+
     Po nastavení názvu sa ovládacia téma kamery zmení na *camera/<názov>*.
 
 Na ovládaciu tému je možné posielať správy:
-    - *record* - kamera zaznamená 20 sekundové video na pamäťovú kartu
-    - *left* - servomotor otočí kameru o 10° do ľava
-    - *right* - servomotor otočí kameru o 10° do prava
+
+- *record* - kamera zaznamená 20 sekundové video na pamäťovú kartu
+- *left* - servomotor otočí kameru o 10° do ľava
+- *right* - servomotor otočí kameru o 10° do prava
 
 Z bezpečnostnej kamery je možné pozerať živé vysielanie vo viacerých prehliadačoch zároveň na URL adrese *<IP_kamera>:8000*.
 
@@ -183,15 +201,18 @@ Je potrebne nainštalovať softvér na ovládanie Raspberry Pi SenseHat a násle
 ```
 Pri zapnutí meteostanice ``` python3 meteo_station/meteo_station_controller.py ``` začne odoberať nastavovaciu tému *settings/meteo_sensors/<IP_adresa_meteostanice>*.
 Následne na túto tému môžme odosielať správy v tvare:
-    - *SETLOCATION <lokácia>*
+
+- *SETLOCATION <lokácia>*
+
     Nastaví alebo zmení tému, na ktorú sú každých 5 sekúnd odosielané namerané hodnoty zo senzorov, na *motion_sensor/<lokácia>*.
 
 Správa s nameranými hodnotami vyzerá napríklad takto : *meteo_sensors/kitchen Wed, 15 May 2019 09:48:54 temperature is 22\,\textdegree C, humidity is 58\%, pressure is 997\,hPA, which is low pressure*
 
 Namerané hodnoty sa tiež zobrazujú na LED displeji umiestnenom na Raspberry Pi Sense HAT. Pomocou joysticku je možné medzi veličinami prepínať. 
-    - Dohora - teplota
-    - Doľava - atmosferický tlak 
-    - Doprava - vlhkosť
+
+- Dohora - teplota
+- Doľava - atmosferický tlak 
+- Doprava - vlhkosť
 
 **Ovládač**
 
