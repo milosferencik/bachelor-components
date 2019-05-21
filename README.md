@@ -204,7 +204,7 @@ Následne na túto tému môžme odosielať správy v tvare:
 
 - *SETLOCATION <lokácia>*
 
-    Nastaví alebo zmení tému, na ktorú sú každých 5 sekúnd odosielané namerané hodnoty zo senzorov, na *motion_sensor/<lokácia>*.
+    Nastaví alebo zmení tému, na ktorú sú každých 5 sekúnd odosielané namerané hodnoty zo senzorov, na *meteo_sensors/<lokácia>*.
 
 Správa s nameranými hodnotami vyzerá napríklad takto : *meteo_sensors/kitchen Wed, 15 May 2019 09:48:54 temperature is 22\,\textdegree C, humidity is 58\%, pressure is 997\,hPA, which is low pressure*
 

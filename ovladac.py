@@ -4,7 +4,7 @@ import time
 def on_connect(client, userdata, flags, rc):
     print("Connected with rc: ", rc)
     client.subscribe("settings/#")
-    client.subscribe("temperature/#")
+    client.subscribe("meteo_sensors/#")
     client.subscribe("ovladac")
 
 def on_message(client, userdata, message):
